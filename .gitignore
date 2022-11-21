@@ -1,0 +1,16 @@
+*.json
+*.asv
+*.fig
+*.log
+*.original
+*.prj
+*.mldatx
+*.slxc
+*.mat
+*.html
+*.mexw64
+
+*/fiaccel/
+*/slprj/
+*/codegen/
+*/instrumentation/
