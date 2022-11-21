@@ -1,4 +1,9 @@
-function xy_array = gen_xy_array(n_iterations, is_split, lin_data_only, use_meas_data, meas_data_files)
+function xy_array = gen_xy_array(n_iterations,...
+                                is_split,...
+                                lin_data_only,...
+                                use_meas_data,...
+                                meas_data_files,...
+                                data_settings_path)
     % This function is used by a testbench for RLS algorithms. 
     % It generates a 2-dimensional cell-array of
     % size n_iterations x 1, being n_iterations the number
@@ -24,9 +29,9 @@ function xy_array = gen_xy_array(n_iterations, is_split, lin_data_only, use_meas
     %       - y => target output sequence
     
     current_path = fileparts(mfilename( 'fullpath' ));
-    addpath(strcat(current_path, '/../settings'));
+    addpath(data_settings_path);
     
-    xy_array_file_path = strcat(current_path, '/../data/meas_xy_array.mat');
+    xy_array_file_path = strcat(current_path, '/../../../data/meas_xy_array.mat');
     
     % This guard clause checks that measured data is true and that
     % the file meas_xy_array.mat exists. meas_xy_array.mat contains
@@ -65,7 +70,7 @@ function xy_array = gen_xy_array(n_iterations, is_split, lin_data_only, use_meas
 
     % Load measured data if required
     if use_meas_data
-        [inputs, targets] = load_traces(strcat(current_path, '/../data/', meas_data_files));
+        [inputs, targets] = load_traces(strcat(current_path, '/../../../data/', meas_data_files));
     end    
 
     
@@ -83,7 +88,7 @@ function xy_array = gen_xy_array(n_iterations, is_split, lin_data_only, use_meas
             end
         else
             if use_meas_data
-                [X1, X2, y] = gen_nonlin_inputs_meas(inputs(:, iteration), targets(:, iteration), L1, L2);
+                [X1, X2, y] = gen_volterra_inputs_meas(inputs(:, iteration), targets(:, iteration), L1, L2);
             else
                 [X1, X2, y] = gen_nonlin_inputs_simulated(N, L1, L2, W);
             end

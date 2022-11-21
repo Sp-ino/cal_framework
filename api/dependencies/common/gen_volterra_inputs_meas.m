@@ -1,4 +1,4 @@
-function [X1, X2, y] = gen_nonlin_inputs_meas(input, target, lin_len, nonlin_len)
+function [X1, X2, y] = gen_volterra_inputs_meas(input, target, lin_len, nonlin_len)
     remove_offset = 0;
 
     x = input';

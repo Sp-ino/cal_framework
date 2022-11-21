@@ -1,4 +1,9 @@
-function result_arr = testbench(algorithm, n_iterations, lin_data_only, use_meas_data, meas_data_files)
+function result_arr = testbench(algorithm,...
+                                n_iterations,...
+                                lin_data_only,...
+                                use_meas_data,....
+                                meas_data_files,...
+                                data_settings_path)
     % This function provides a generic testbench for
     % adaptive filtering algorithms.
     % 
@@ -14,6 +19,8 @@ function result_arr = testbench(algorithm, n_iterations, lin_data_only, use_meas
     %   simulated data (use_meas_data=false).
     % - meas_data_files: list of string literals containing the names of the
     %   files from which measured data is loaded
+    % - data_settings_path: absolute path of the folder in which data settings
+    %   are stored
     % 
     % Output arguments:
     % - result_arr: cell array containing structs. Each
@@ -27,7 +34,12 @@ function result_arr = testbench(algorithm, n_iterations, lin_data_only, use_meas
 
     is_split_alg = is_split(algorithm);
 
-    xy_array = gen_xy_array(n_iterations, is_split_alg, lin_data_only, use_meas_data, meas_data_files);
+    xy_array = gen_xy_array(n_iterations,...
+                            is_split_alg,...
+                            lin_data_only,...
+                            use_meas_data,...
+                            meas_data_files,...
+                            data_settings_path);
 
     result_arr = test_loop(algorithm, xy_array, is_split_alg);
 

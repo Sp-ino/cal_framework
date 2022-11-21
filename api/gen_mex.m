@@ -1,4 +1,4 @@
-function gen_mex(algorithm)
+function gen_mex(algorithm, data_settings_path)
     % This function automatizes the generation of an instrumented
     % mex file with buildInstrumentedMex. The function uses the
     % settings stored in split_tb_settings.json or in joint_tb_settings.json
@@ -9,12 +9,15 @@ function gen_mex(algorithm)
     % Input arguments:
     % - algorithm: function handle that points to the function to be
     %   accelerated.
+    % - data_settings_path: absolute path of the folder in which data settings
+    %   are stored
 
     initial_path = pwd();
 
     current_path = fileparts(mfilename( 'fullpath' ));
     addpath(strcat(current_path, '/dependencies/settings'));
     addpath((strcat(current_path, '/dependencies/common')));
+    addpath(data_settings_path);
 
     % Find whether the algorithm is split or joint
     is_split_alg = is_split(algorithm);
