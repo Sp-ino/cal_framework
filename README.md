@@ -54,4 +54,4 @@ The *settings* folder should contain two .json files:
 - split_settings.json: this file contains settings for a split algorithm. The expression "split
   algorithm" is used here to indicate an algorithm that needs 2 separate input data matrices X1 and X2,
   X1 being the linear part and X2 being the nonlinear part of the overall input matrix.
-The user has to modify these two files whenever they wish to change the settings.
+If the user wishes to change the settings for the testbench, they have to modify these files.
