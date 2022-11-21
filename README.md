@@ -12,7 +12,8 @@ For the moment, the API is able to test algorithms on the following models:
 - linear model from measured data: uses data loaded from file
 - linear model from measured data: uses data loaded from file and a volterra noncausal model is used
 
-## Basic usage
+## Usage
+#### Setup
 To use this framework clone this repository, implement your algorithms as MATLAB functions and write a
 testbench script and an acceleration script (if have fixed point code that you need to accelerate).
 Both scripts should contain the line   
@@ -23,23 +24,22 @@ where `savepath` represents the path at which you have saved this repository. Th
 should define variables with the settings and a handle that points to the algorithm under test and
 call the `testbench` function. The acceleration script should define a handle the points to the
 algorithm to be accelerated and call the `gen_mex` function. Both `testbench` and `gen_mex` are
-described in greater detail in the sections that follow.
-You can store your algorithms and your testbench/acceleration scripts wherever you like, just make
-sure that the call to `addpath` inside the scripts makes your local copy of this repository visible.   
+described in greater detail in the sections that follow. You can store your algorithms and your
+testbench/acceleration scripts wherever you like, just make sure that the call to `addpath` inside the scripts makes your local copy of this repository visible.   
    
 The algorithms to test should be MATLAB functions with the following requisites:
 - The function can accept 2 or 3 input arguments. In the first case, it accepts
   a matrix X as its first argument and a column vector y as its second argument.
-  X should has size sequ_len _x_ filt_len, where sequ_len is the length of the
-  input sequence for calibration and filt_len is the length of the adaptive filter.
-  y should be of size sequ_len _x_ 1 In the second case, the function accepts X1,
-  X2 and y as arguments. The sizes of X1 and X2 are, respectively, sequ_len _x_ lin_len
-  and sequ_len _x_ nonlin_len, where lin_len is the length of the linear part of
-  the filter and nonlin_len is the length of the nonlinear part. y has size sequ_len _x_ 1
+  X should has size *sequ_len x filt_len*, where sequ_len is the length of the
+  input sequence for calibration and *filt_len* is the length of the adaptive filter.
+  y should be of size *sequ_len x 1* In the second case, the function accepts X1,
+  X2 and y as arguments. The sizes of X1 and X2 are, respectively, *sequ_len x lin_len*
+  and *sequ_len x nonlin_len*, where *lin_len* is the length of the linear part of
+  the filter and *nonlin_len* is the length of the nonlinear part. y has size *sequ_len x 1*
   like in the previous case. In both cases y is the target sequence, while X, X1 and X2
   are the input data matrices which are built from the input sequence x.
 - The function should return a column vector ys that represents the estimated
-  sequence (of size sequ_len _x_ 1).
+  sequence (of size *sequ_len x 1*).
 
 #### Settings file
 Settings about data (e.g. filter length, sequence length, etc.) should be stored in a dedicated
