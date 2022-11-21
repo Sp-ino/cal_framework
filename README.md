@@ -41,13 +41,6 @@ The algorithms to test should be MATLAB functions with the following requisites:
 - The function should return a column vector ys that represents the estimated
   sequence (of size sequ_len _x_ 1).
 
-
-## API description (`gen_mex` and `testbench`)
-#### Organization
-This framework provides an application programming interface (API) composed of 2 functions:
-`gen_mex` and `testbench`. Both functions are inside the *api* folder. Inside *api* is
-the *dependencies* folder, which contains the files on which `gen_mex` and `testbench` depend.
-
 #### Settings file
 Settings about data (e.g. filter length, sequence length, etc.) should be stored in a dedicated
 folder whose path must be passed as an argument to `gen_mex` and `testbench`. This folder should
@@ -59,6 +52,13 @@ contain two .json files:
 - split_settings.json: contains settings for a split algorithm. The expression "split
   algorithm" here refers to an algorithm that needs 2 separate input data matrices X1 and X2,
   X1 being the linear part and X2 being the nonlinear part of the overall input matrix.
+
+
+## API description (`gen_mex` and `testbench`)
+#### Organization
+This framework provides an application programming interface (API) composed of 2 functions:
+`gen_mex` and `testbench`. Both functions are inside the *api* folder. Inside *api* is
+the *dependencies* folder, which contains the files on which `gen_mex` and `testbench` depend.
 
 #### The `gen_mex` function
 `gen_mex` generates mex instrumented code from a MATLAB function that employs fixed point
