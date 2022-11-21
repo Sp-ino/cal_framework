@@ -3,6 +3,17 @@
 ## Introduction
 The contents of this folder provide a framework for working with fixed point algorithms.
 The code exploits MATLAB's fixed point utilities to speed up the design and validation process.
+To use this framework clone this repository, implement your algorithms as MATLAB functions and write a
+testbench script and an acceleration script (if have fixed point code that you need to accelerate).
+Both scripts should contain the line
+`$ addpath('savepath/cal_framework/api')`
+where `savepath` represents the path at which you have saved this repository. The testbench script
+should define variables with the settings and a handle that points to the algorithm under test and
+call the `testbench` function. The acceleration script should define a handle the points to the
+algorithm to be accelerated and call the `gen_mex` function. Both `testbench` and `gen_mex` are
+described in greater detail in the sections that follow.
+You can store your algorithms and your testbench/acceleration scripts wherever you like, just make
+sure that the call to `addpath` inside the scripts makes your local copy of this repository visible.
 
 
 ## API description (`gen_mex` and `testbench`)
@@ -19,7 +30,7 @@ able to store information about its internal variable when it is run inside a te
 #### The `testbench` function
 The testbench function is used to run tests on a MATLAB function that implements an algorithm.
 `testbench` allows to run the algorithm under test on either simulated data or measured data.
- 
+
 
 ## Description of the contents of the *dependencies* folder 
 #### The *common* folder
