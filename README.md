@@ -5,8 +5,10 @@ The contents of this folder provide a framework for working with fixed point alg
 The code exploits MATLAB's fixed point utilities to speed up the design and validation process.
 To use this framework clone this repository, implement your algorithms as MATLAB functions and write a
 testbench script and an acceleration script (if have fixed point code that you need to accelerate).
-Both scripts should contain the line
-`$ addpath('savepath/cal_framework/api')`
+Both scripts should contain the line   
+   
+`addpath('savepath/cal_framework/api')`   
+   
 where `savepath` represents the path at which you have saved this repository. The testbench script
 should define variables with the settings and a handle that points to the algorithm under test and
 call the `testbench` function. The acceleration script should define a handle the points to the
@@ -37,7 +39,7 @@ The testbench function is used to run tests on a MATLAB function that implements
 This folder mainly contains functions that are shared among the other MATLAB files in the framework.
 
 #### The *data* folder
-This folder contains files in which measured data is stored. Measured data can be used by the testbench.
+This folder contains files in which measured data is stored. Measured data is used by the testbench.
 
 #### The *settings* folder
 This folder contains .json files that are used to store settings used by the testbench and the 
@@ -49,6 +51,7 @@ The *settings* folder should contain two .json files:
   algorithm" is used here to indicate an algorithm that accepts a single input data matrix X, which
   can contain a linear and a nonlinear part. A joint algorithm does not need to know how the matrix
   is organized (i.e. which part is the linear one and which part is the nonlinear one).
-- split_settings.json: this file contains settings for a spli algorithm. The expression "split
+- split_settings.json: this file contains settings for a split algorithm. The expression "split
   algorithm" is used here to indicate an algorithm that needs 2 separate input data matrices X1 and X2,
   X1 being the linear part and X2 being the nonlinear part of the overall input matrix.
+The user has to modify these two files whenever they wish to change the settings.
