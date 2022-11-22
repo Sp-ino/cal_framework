@@ -41,8 +41,8 @@ The algorithms to test should be MATLAB functions with the following requisites:
 - The function should return a column vector ys that represents the estimated
   sequence (of size *sequ_len x 1*).
 
-#### Settings file
-Settings about data (e.g. filter length, sequence length, etc.) should be stored in a dedicated
+#### Settings files
+Settings regarding data (e.g. filter length, sequence length, etc.) should be stored in a dedicated
 folder whose path must be passed as an argument to `gen_mex` and `testbench`. This folder should
 contain two .json files:
 - joint_settings.json: contains settings for a joint algorithm. The expression "joint

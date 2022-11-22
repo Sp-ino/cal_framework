@@ -27,6 +27,9 @@ function result_arr = testbench(algorithm,...
     %   struct has two fields:
     %       - y => target sequence
     %       - ys => estimated sequence
+    % 
+    % Copyright (c) 2022 Valerio Spinogatti
+    % Licensed under GNU License
     
     current_path = fileparts(mfilename( 'fullpath' ));
     addpath(strcat(current_path, '/dependencies/common'));

@@ -11,6 +11,9 @@ function gen_mex(algorithm, data_settings_path)
     %   accelerated.
     % - data_settings_path: absolute path of the folder in which data settings
     %   are stored
+    % 
+    % Copyright (c) 2022 Valerio Spinogatti
+    % Licensed under GNU License
 
     initial_path = pwd();
 
