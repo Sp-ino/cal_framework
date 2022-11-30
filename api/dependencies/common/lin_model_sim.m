@@ -10,11 +10,16 @@ function [X1, X2, y, M] = lin_model_sim(settings)
     % Licensed under GNU License
 
     % Read linear settings
-    s = settings.lin_settings;
-    lin_len = s.filt_len;
-    sequ_len = s.sequ_len;
-    output_width = s.output_width;
-    noise_stddev = s.noise_stddev;
+    try
+        s = settings.lin_settings;
+        lin_len = s.lin_len;
+        sequ_len = s.sequ_len;
+        output_width = s.output_width;
+        noise_stddev = s.noise_stddev;
+    catch
+        fprintf("Error: %s\n\n", err.message);
+        error(sprintf("lin_model_sim:check that the settings file has the correct fields."))
+    end
 
     % generate white noise with std deviation = 0.1
     scaling = 0.1;

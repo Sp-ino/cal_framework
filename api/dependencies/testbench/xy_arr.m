@@ -31,7 +31,6 @@ function xy_array = xy_arr(n_iterations,...
     % 
     % Copyright (c) 2022 Valerio Spinogatti
     % Licensed under GNU License
-
         
     % -------------------------------Parse model type-------------------------------
     if isa(model, 'char') % In this case we use functions that produce simulated data to generate the output array
@@ -73,7 +72,7 @@ function xy_array = xy_arr(n_iterations,...
 
     % -------------Read settings from file and create xy_array----------------------
     xy_array = cell(n_iterations, 1);
-    settings = read_settings(settings_file)
+    settings = read_settings(settings_file);
     % ------------------------------------------------------------------------------
     
     % --------------Generate output array containing (X1, X2, y) triplets-----------

@@ -6,7 +6,6 @@ function ys = single_run_with_checks(algorithm, X1, X2, y)
     nargs = find_nargin(algorithm);
 
     switch nargs
-
     case 3
         if isempty(X2)
             % fprintf(strcat("\n\ntest_loop:could not run algorithm because the nonlinear matrix X2 is empty\n",...

@@ -12,12 +12,17 @@ function [X1, X2, y, M] = nonlin_model_sim(settings)
     % Licensed under GNU License
 
     % Read nonlinear settings
-    s = settings.nonlin_settings;
-    lin_len = s.lin_len;
-    nonlin_len = s.nonlin_len;
-    sequ_len = s.sequ_len;
-    output_width = s.output_width;
-    noise_stddev = s.noise_stddev;
+    try
+        s = settings.nonlin_settings;
+        lin_len = s.lin_len;
+        nonlin_len = s.nonlin_len;
+        sequ_len = s.sequ_len;
+        output_width = s.output_width;
+        noise_stddev = s.noise_stddev;
+    catch
+        fprintf("Error: %s\n\n", err.message);
+        error(sprintf("nonlin_model_sim:check that the settings file has the correct fields."))
+    end
 
     % generate white noise with std deviation = 0.1
     scaling = 0.1;
