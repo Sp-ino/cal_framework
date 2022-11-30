@@ -16,21 +16,27 @@ function [inputs, targets] = load_traces(file_paths, start, stop)
     % Output arguments:
     % - inputs: matrix containing input traces (each column is a trace)
     % - targets: matrix containing target traces (each column is a trace)
+    % 
+    % Copyright (c) 2022 Valerio Spinogatti
+    % Licensed under GNU License
+
+
+    current_path = fileparts(mfilename( 'fullpath' ));
 
     if nargin == 1
-        start = 1
+        start = 1;
         stop  = 'end';
     elseif nargin == 2
-        stop = 'end'
+        stop = 'end';
     end
 
     initial = true;
     for file = file_paths
         if initial
-            [inputs, targets] = load_from_single_file(strcat(current_path, '/../data/', file), start, stop);
+            [inputs, targets] = load_from_single_file(file, start, stop);
             initial = false;
         else
-            [inp, targ] = load_from_single_file(strcat(current_path, '/../data/', file), start, stop);
+            [inp, targ] = load_from_single_file(file, start, stop);
             inputs = cat(2, inputs, inp);
             targets = cat(2, targets, targ);
         end
@@ -40,6 +46,12 @@ end
 
 
 function [inputs, targets] = load_from_single_file(file_path, start, stop)
+
+    data = load(file_path);
+    idata = data.idata; % xIf is the input *to the channel + analog front end*
+    odata2 = data.odata2; % yIf is the output *of the channel + analog front end* (noisy and distorted).
+    % t = data.t;
+    
     if strcmp(stop, 'end')
         idata = idata(start:end, :);
         odata2 = odata2(start:end, :, :);
@@ -48,11 +60,6 @@ function [inputs, targets] = load_from_single_file(file_path, start, stop)
         odata2 = odata2(start:stop, :, :);
     end
 
-    data = load(file_path);
-    idata = data.idata; % xIf is the input *to the channel + analog front end*
-    odata2 = data.odata2; % yIf is the output *of the channel + analog front end* (noisy and distorted).
-    % t = data.t;
-        
     sequ_len = size(idata, 1);
     n_input_traces = size(idata, 2);
     
@@ -61,8 +68,8 @@ function [inputs, targets] = load_from_single_file(file_path, start, stop)
     
     ystd = std(idata, [], 'all');
     xstd = max(odata2, [], 'all');
-    yscaling = 0.1/ymax;
-    xscaling = 0.1/xmax;
+    yscaling = 0.1/ystd;
+    xscaling = 0.1/xstd;
 
     for input_idx = 1:n_input_traces        
         x1 = odata2(:, input_idx, 1);

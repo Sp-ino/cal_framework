@@ -1,4 +1,4 @@
-function [X, y] = gen_lin_inputs_meas(input, target)
+function [X, y] = lin_model(input, target)
     x = input';
     y = target';
 

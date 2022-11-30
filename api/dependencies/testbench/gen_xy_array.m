@@ -4,7 +4,7 @@ function xy_array = gen_xy_array(n_iterations,...
                                 use_meas_data,...
                                 meas_data_files,...
                                 data_settings_path)
-    % This function is used by a testbench for RLS algorithms. 
+    % This function is used by a testbench for model calbration algorithms. 
     % It generates a 2-dimensional cell-array of
     % size n_iterations x 1, being n_iterations the number
     % of (X1, X2, y) triplets to use for testing an algorithm.
@@ -56,9 +56,9 @@ function xy_array = gen_xy_array(n_iterations,...
     
     % Read settings from file
     if is_split
-        sfile = fileread('split_tb_settings.json'); 
+        sfile = fileread('lin_tb_settings.json'); 
     else
-        sfile = fileread('joint_tb_settings.json'); 
+        sfile = fileread('nonlin_tb_settings.json'); 
     end
     settings = jsondecode(sfile);
     L1 = settings.lin_len;

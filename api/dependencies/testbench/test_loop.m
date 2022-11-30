@@ -1,4 +1,4 @@
-function result_arr = test_loop(algorithm, xy_array, is_split)
+function result_arr = test_loop(algorithm, xy_array)
     % This function runs the test loop by calling
     % the function under test repeatedly on the
     % function under test. The number of iterations
@@ -18,9 +18,6 @@ function result_arr = test_loop(algorithm, xy_array, is_split)
     %       - y => target sequence
     %       - ys => estimated sequence
 
-    current_path = fileparts(mfilename( 'fullpath' ));
-    addpath(strcat(current_path, '/../common'));
-
     n_iterations = size(xy_array, 1);
 
     result_arr = cell(n_iterations, 1);
@@ -32,7 +29,7 @@ function result_arr = test_loop(algorithm, xy_array, is_split)
         X2 = xy_array{iteration}.X2;
         y = xy_array{iteration}.y;
 
-        ys = single_run_with_checks(algorithm, X1, X2, y, is_split);
+        ys = single_run_with_checks(algorithm, X1, X2, y);
 
         print_results(y, ys);
 
