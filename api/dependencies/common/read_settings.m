@@ -34,8 +34,10 @@ function settings = read_settings(settings_file)
 
     try
         sfile = fileread(settings_file);
-    catch
-        error(sprintf("Something went wrong while trying to read settings from the file you specified.\n Check that the format of the file is correct."))
+    catch err
+        msg = sprintf("\nread_settings:something went wrong while trying to read the settings file.\n\n");
+        msg = strcat(msg, sprintf("Error: %s\n", err.message));
+        error(msg)
     end
 
     settings = jsondecode(sfile);
