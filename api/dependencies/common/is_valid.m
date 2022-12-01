@@ -7,6 +7,15 @@ function out = is_valid(handle)
     % 
     % Output arguments:
     % - out: true if the handle is valid, false otherwise
+    % 
+    % Copyright (c) 2022 Valerio Spinogatti
+    % Licensed under GNU License
 
 
+    info = functions(handle);
+    if strcmp(info.file, '')
+        return false
+    end
+
+    return true
 end

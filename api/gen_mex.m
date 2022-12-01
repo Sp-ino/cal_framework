@@ -15,15 +15,22 @@ function gen_mex(algorithm, settings_file)
     % Copyright (c) 2022 Valerio Spinogatti
     % Licensed under GNU License
 
+    current_path = fileparts(mfilename( 'fullpath' ));
+    addpath((strcat(current_path, '/dependencies/common')));
+
+    % Check that a valid handle has been passed
     if not(input("Accelerate algorithm?\n No  => Enter 0\n Yes => Enter any other number\n> "))
         return
     end
 
+    if not(is_valid(algorithm))
+        fprintf("\n\nerror:gen_mex:invalid algorithm handle, I'm not generating code\n\n");
+    end
+
+    % Record the path of the working directory
     initial_path = pwd();
 
-    current_path = fileparts(mfilename( 'fullpath' ));
-    addpath((strcat(current_path, '/dependencies/common')));
-
+    % Read settings file
     nargs = find_nargin(algorithm);
     settings = read_settings(settings_file);
 
@@ -79,7 +86,7 @@ function gen_mex(algorithm, settings_file)
     end
 
     % If everything is fine, call buildInstrumentedMex to generate the instrumented
-    % mex function.
+    % mex function after moving to the location of the target function.
     cd(alg_path)
 
     fprintf("\ngen_mex:info:building instrumented mex function...\n");
@@ -89,6 +96,7 @@ function gen_mex(algorithm, settings_file)
         buildInstrumentedMex(alg_name, '-args', {X1_example, y_example});
     end
 
-    cd(initial_path)
+    % Move back to the initial path
+    cd(initial_path) 
     fprintf("\ngen_mex:info:build completed, the mex function is stored at \n%s\n\n", alg_path);
 end

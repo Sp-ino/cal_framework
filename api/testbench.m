@@ -34,6 +34,14 @@ function result_arr = testbench(algorithm,...
     current_path = fileparts(mfilename( 'fullpath' ));
     addpath(strcat(current_path, '/dependencies/testbench'));
 
+    % Check that valid handles have been passed
+    if not(is_valid(algorithm))
+        fprintf("\n\nerror:testbench:invalid algorithm handle, I'm not running the testbench\n\n");
+    elseif not(is_valid(model))
+        fprintf("\n\nerror:testbench:invalid model handle, I'm not running the testbench\n\n");
+    end
+
+    % Apply model to data, run test loop and display results
     xy_array = xy_arr(n_iterations,...
                         model,...
                         settings_file,...
