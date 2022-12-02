@@ -14,8 +14,8 @@ function out = is_valid(handle)
 
     info = functions(handle);
     if strcmp(info.file, '')
-        return false
+        out = false;
     end
 
-    return true
+    out = true;
 end
