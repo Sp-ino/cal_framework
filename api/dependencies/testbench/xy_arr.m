@@ -50,7 +50,11 @@ function xy_array = xy_arr(n_iterations,...
         % Define a flag variable that tells whether or not we are using simulated data
         sim_data = true;
 
-    elseif isa(model, 'function_handle') % In this case we apply a custom model to external data to generate the output array
+    elseif isa(model, 'function_handle') % In this case we apply a custom model to external data to generate the output array      
+        if not(is_valid(model))
+            fprintf("\n\nerror:testbench:invalid model handle, I'm not running the testbench\n\n");
+        end
+        
         model_func = model;
 
         % Load external data
@@ -79,8 +83,12 @@ function xy_array = xy_arr(n_iterations,...
     for idx = 1:n_iterations
         if sim_data
             [X1, X2, y] = model_func(settings);
+            % X1(100, :)
+            % X2(100, :)
         else
             [X1, X2, y] = model_func(inputs(:, idx), targets(:, idx), settings);
+            % X1(100, :)
+            % X2(100, :)
         end
 
         xy_array{idx}.X1 = X1;

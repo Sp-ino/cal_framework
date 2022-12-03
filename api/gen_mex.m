@@ -18,11 +18,11 @@ function gen_mex(algorithm, settings_file)
     current_path = fileparts(mfilename( 'fullpath' ));
     addpath((strcat(current_path, '/dependencies/common')));
 
+    % if not(input("Accelerate algorithm?\n No  => Enter 0\n Yes => Enter any other number\n> "))
+    %     return
+    % end
+    
     % Check that a valid handle has been passed
-    if not(input("Accelerate algorithm?\n No  => Enter 0\n Yes => Enter any other number\n> "))
-        return
-    end
-
     if not(is_valid(algorithm))
         fprintf("\n\nerror:gen_mex:invalid algorithm handle, I'm not generating code\n\n");
     end
@@ -35,9 +35,9 @@ function gen_mex(algorithm, settings_file)
     settings = read_settings(settings_file);
 
     switch nargs
-    case 3
+    case 2
         try
-            is_lin = false;
+            is_lin = true;
             s = settings.lin_settings;
             L1 = s.lin_len;
             N = s.sequ_len;
@@ -48,16 +48,16 @@ function gen_mex(algorithm, settings_file)
             error(msg)
         end
     
-    case 2
+    case 3
         try
-            is_lin = true;
+            is_lin = false;
             s = settings.nonlin_settings;
             L1 = s.lin_len;
             L2 = s.nonlin_len;
             N = s.sequ_len;
             W = s.output_width;
         catch err
-            msg = sprintf("\volterra_model:check that the settings file has the correct fields.\n\n");
+            msg = sprintf("\gen_mex:check that the settings file has the correct fields.\n\n");
             msg = strcat(msg, sprintf("Error: %s\n", err.message));
             error(msg)
         end    
