@@ -66,10 +66,12 @@ function [inputs, targets] = load_from_single_file(file_path, start, stop)
     inputs = zeros(sequ_len, 2*n_input_traces);
     targets = zeros(sequ_len, 2*n_input_traces);
     
-    ystd = std(idata, [], 'all');
-    xstd = max(odata2, [], 'all');
-    yscaling = 0.1/ystd;
-    xscaling = 0.1/xstd;
+    % ystd = std(idata, [], 'all');
+    % xstd = std(odata2, [], 'all');
+    ymax = max(idata, [], 'all');
+    xmax = max(odata2, [], 'all');
+    yscaling = 0.9/ymax;
+    xscaling = 0.9/xmax;
 
     for input_idx = 1:n_input_traces        
         x1 = odata2(:, input_idx, 1);
