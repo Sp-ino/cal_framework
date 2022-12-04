@@ -1,11 +1,11 @@
-function xy_array = xy_arr(n_iterations,...
+function xy_array = apply_model(n_iterations,...
                             model,...
                             settings_file,...
                             meas_data_files)
 
     % This function is used by a testbench for model calbration algorithms. 
-    % It generates a 2-dimensional cell-array of
-    % size n_iterations x 1, being n_iterations the number
+    % It applies a model to generate a 2-dimensional cell-array of
+    % size n_iterations x 1, n_iterations being the number
     % of (X1, X2, y) triplets to use for testing an algorithm.
     % Each row corresponds to a test iteration and contains
     % a struct with the linear design matrix (X1), the
@@ -83,13 +83,11 @@ function xy_array = xy_arr(n_iterations,...
     for idx = 1:n_iterations
         if sim_data
             [X1, X2, y] = model_func(settings);
-            % X1(100, :)
-            % X2(100, :)
         else
             [X1, X2, y] = model_func(inputs(:, idx), targets(:, idx), settings);
-            % X1(100, :)
-            % X2(100, :)
         end
+    
+        model_sanity_checks(X1, X2, y);
 
         xy_array{idx}.X1 = X1;
         xy_array{idx}.X2 = X2;
@@ -97,4 +95,18 @@ function xy_array = xy_arr(n_iterations,...
     end
     % ------------------------------------------------------------------------------
 
+end
+
+
+
+function model_sanity_checks(X1, X2, y)
+    if size(y, 1) ~= size(X1, 1)
+        error(sprintf('testbench:xy_arr:size mismatch between X1 (size %s x %s) and y (size %s x %s). X1 and y should have the same number of rows.',...
+                num2str(size(X1, 1)), num2str(size(X1, 2)), num2str(size(y, 1)), num2str(size(y, 2))));
+    end
+
+    if size(X1, 1) ~= size(X2, 1)
+        error(sprintf('testbench:xy_arr:size mismatch between X1 (size %s x %s) and X2 (size %s x %s). X1 and X2 should have the same number of rows.',...
+                num2str(size(X1, 1)), num2str(size(X1, 2)), num2str(size(X2, 1)), num2str(size(X2, 2))));
+    end
 end

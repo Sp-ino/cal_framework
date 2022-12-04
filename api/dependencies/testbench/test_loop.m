@@ -86,7 +86,7 @@ function ys = single_run_with_checks(algorithm, X1, X2, y)
                             sprintf("\nCheck that the settings you specified are correct. If the algorithm under test\n"),...
                             sprintf("is a mex function, make sure that you generated the function with the correct input size\n\n"));
             else
-                msg = err_msg_with_stack(err, sprintf("\nsingle_run_with_checks: error! Check that the algorithm you are passing to the testbench() function is working.\n"))
+                msg = err_msg_with_stack(err, sprintf("\nsingle_run_with_checks: error! Check that the algorithm you are passing to the testbench() function is working.\n"));
             end
             error(msg)
         end
@@ -101,7 +101,7 @@ function ys = single_run_with_checks(algorithm, X1, X2, y)
                             sprintf("\nCheck that the settings you specified are correct. If the algorithm under test\n"),...
                             sprintf("is a mex function, make sure that you generated the function with the correct input size\n\n"));
             else
-                msg = err_msg_with_stack(err, sprintf("\nsingle_run_with_checks: error! Check that the algorithm you are passing to the testbench() function is working.\n"))
+                msg = err_msg_with_stack(err, sprintf("\nsingle_run_with_checks: error! Check that the algorithm you are passing to the testbench() function is working.\n"));
             end
             error(msg)
         end
