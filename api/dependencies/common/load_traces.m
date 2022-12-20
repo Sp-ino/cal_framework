@@ -68,24 +68,26 @@ function [inputs, targets] = load_from_single_file(file_path, start, stop)
     
     % ystd = std(idata, [], 'all');
     % xstd = std(odata2, [], 'all');
-    ymax = max(idata, [], 'all');
-    xmax = max(odata2, [], 'all');
-    yscaling = 0.9/ymax;
-    xscaling = 0.9/xmax;
-
-    for input_idx = 1:n_input_traces        
+    
+    for input_idx = 1:n_input_traces                
         x1 = odata2(:, input_idx, 1);
         x2 = odata2(:, input_idx, 2);
         y = idata(:, input_idx);
+        
+        xmax1 = max(abs(x1), [], 'all');
+        xmax2 = max(abs(x2), [], 'all');
+        ymax = max(abs(y), [], 'all');
+        xscaling1 = 0.5/xmax1;
+        xscaling2 = 0.5/xmax2;
+        yscaling = 0.5/ymax;
 
         y = y';
         x1 = x1';
         x2 = x2';
         
-        inputs(:, input_idx*2-1) = xscaling*x1;
-        inputs(:, input_idx*2) = xscaling*x2;
+        inputs(:, input_idx*2-1) = xscaling1*x1;
+        inputs(:, input_idx*2) = xscaling2*x2;
         targets(:, input_idx*2-1) = yscaling*y;
         targets(:, input_idx*2) = yscaling*y;
-        
     end
 end

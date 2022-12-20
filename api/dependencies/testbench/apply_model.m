@@ -80,18 +80,10 @@ function xy_array = apply_model(n_iterations,...
     % ------------------------------------------------------------------------------
     
     % --------------Generate output array containing (X1, X2, y) triplets-----------
-    for idx = 1:n_iterations
-        if sim_data
-            [X1, X2, y] = model_func(settings);
-        else
-            [X1, X2, y] = model_func(inputs(:, idx), targets(:, idx), settings);
-        end
-    
-        model_sanity_checks(X1, X2, y);
-
-        xy_array{idx}.X1 = X1;
-        xy_array{idx}.X2 = X2;
-        xy_array{idx}.y = y;
+    if sim_data
+        xy_array = model_func(settings);
+    else
+        xy_array = model_func(inputs, targets, settings);
     end
     % ------------------------------------------------------------------------------
 

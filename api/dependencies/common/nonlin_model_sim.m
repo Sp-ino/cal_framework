@@ -1,4 +1,18 @@
-function [X1, X2, y, M] = nonlin_model_sim(settings)
+function xy_array = nonlin_model_sim(n_iterations, settings)
+    % Applies nonlinear simulated model a total of n_iterations times
+
+    for idx = 1:n_iterations
+        [X1, X2, y] = nonlin_model_sim_run(settings);
+
+        xy_array{idx}.X1 = X1;
+        xy_array{idx}.X2 = X2;
+        xy_array{idx}.y = y;
+    end
+end
+
+
+
+function [X1, X2, y, M] = nonlin_model_sim_run(settings)
     % Generates data for testing least-squares (LS) 
     % algorithms. In particular, this function
     % generates a random input sequence x, then 
