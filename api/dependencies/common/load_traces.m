@@ -77,9 +77,9 @@ function [inputs, targets] = load_from_single_file(file_path, start, stop)
         xmax1 = max(abs(x1), [], 'all');
         xmax2 = max(abs(x2), [], 'all');
         ymax = max(abs(y), [], 'all');
-        xscaling1 = 0.5/xmax1;
-        xscaling2 = 0.5/xmax2;
-        yscaling = 0.5/ymax;
+        xscaling1 = 0.9/xmax1;
+        xscaling2 = 0.9/xmax2;
+        yscaling = 0.9/ymax;
 
         y = y';
         x1 = x1';
