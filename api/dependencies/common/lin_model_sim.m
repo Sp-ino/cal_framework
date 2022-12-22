@@ -1,6 +1,8 @@
 function xy_array = lin_model_sim(n_iterations, settings)
     % Applies linear simulated model a total of n_iterations times
 
+    xy_array = cell(n_iterations);
+    
     for idx = 1:n_iterations
         [X1, X2, y] = lin_model_sim_run(settings);
 

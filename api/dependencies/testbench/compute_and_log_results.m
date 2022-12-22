@@ -1,4 +1,4 @@
-function metrics = log_results(results, xy_array)
+function metrics = compute_and_log_results(results, xy_array)
     % This function prettyprints the results of a testbench run
     % for an RLS algorithm. The performance of the algorithm
     % at each iteration is compared with a benchmark given by
@@ -25,7 +25,10 @@ function metrics = log_results(results, xy_array)
     %         benchmark results
 
     n_iterations = length(results);
-    metrics = cell(n_iterations, 1);
+    metrics.sndr = zeros(n_iterations, 1)
+    metrics.sndr_bench_lin = zeros(n_iterations, 1)
+    metrics.sndr_bench_nonlin = zeros(n_iterations, 1)
+
     fprintf('\n\n%9s %3s %6s %3s %16s %3s %16s\n',...
     'Iteration', '',...
     'SNDR ','',...
@@ -62,9 +65,9 @@ function metrics = log_results(results, xy_array)
         end
 
         % Save sndr
-        metrics{iteration}.sndr = sndr;
-        metrics{iteration}.sndr_bench_nonlin = sndr_bench_nonlin;
-        metrics{iteration}.sndr_bench_lin = sndr_bench_lin;
+        metrics.sndr(iteration) = sndr;
+        metrics.sndr_bench_nonlin(iteration) = sndr_bench_nonlin;
+        metrics.sndr_bench_lin(iteration) = sndr_bench_lin;
 
         % Print sndr and sndr benchmark
         % fprintf("%d\t\t\t\t%.2f\t\t%.2f\n", iteration, sndr, sndr_bench);

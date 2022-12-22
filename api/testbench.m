@@ -1,8 +1,8 @@
-function result_arr = testbench(algorithm,...
-                                model,...
-                                n_iterations,...
-                                meas_data_files,...
-                                settings_file)
+function [result_arr, metrics] = testbench(algorithm,...
+                                        model,...
+                                        n_iterations,...
+                                        meas_data_files,...
+                                        settings_file)
     % This function provides a generic testbench for
     % adaptive filtering algorithms.
     % 
@@ -13,13 +13,9 @@ function result_arr = testbench(algorithm,...
     %   data is used, then the actual number of iterations is given by
     %   min(n_iteration, len(dataset)), where len(dataset) is the number of
     %   points in the dataset.
-    % - lin_data_only: whether the  algorithm under test works with
-    %   linear data or nonlinear data.
-    % - use_meas_data: whether to use measured data (use_meas_data=true) or
-    %   simulated data (use_meas_data=false).
     % - meas_data_files: list of string literals containing the names of the
     %   files from which measured data is loaded
-    % - data_settings_path: absolute path of the folder in which data settings
+    % - settings_file: absolute path of the folder in which data settings
     %   are stored
     % 
     % Output arguments:
@@ -48,9 +44,10 @@ function result_arr = testbench(algorithm,...
 
     result_arr = test_loop(algorithm, xy_array);
 
-    log_results(result_arr, xy_array);
+    metrics = compute_and_log_results(result_arr, xy_array);
 
-    plot_y_and_ys(result_arr{1}.y, result_arr{1}.ys);
+    plot_metrics(metrics)
+    % plot_y_and_ys(result_arr{1}.y, result_arr{1}.ys);
 
     show_instrum_res(algorithm);
 end

@@ -63,6 +63,8 @@ function xy_array = apply_model(n_iterations,...
 
         % Compute actual number of iterations as the minimum between the number of traces and n_iterations
         n_iterations = min(n_iterations, size(inputs, 2));
+        inputs = inputs(:, 1:n_iterations);
+        targets = targets(:, 1:n_iterations);
 
         % Define a flag variable that tells whether or not we are using simulated data
         sim_data = false;
@@ -75,13 +77,12 @@ function xy_array = apply_model(n_iterations,...
     % ------------------------------------------------------------------------------
 
     % -------------Read settings from file and create xy_array----------------------
-    xy_array = cell(n_iterations, 1);
     settings = read_settings(settings_file);
     % ------------------------------------------------------------------------------
     
     % --------------Generate output array containing (X1, X2, y) triplets-----------
     if sim_data
-        xy_array = model_func(settings);
+        xy_array = model_func(n_iterations, settings);
     else
         xy_array = model_func(inputs, targets, settings);
     end
