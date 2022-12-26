@@ -25,10 +25,10 @@ function metrics = compute_and_log_results(results, xy_array)
     %         benchmark results
 
     n_iterations = length(results);
-    metrics.sndr = zeros(n_iterations, 1)
-    metrics.sndr_bench_lin = zeros(n_iterations, 1)
-    metrics.sndr_bench_nonlin = zeros(n_iterations, 1)
-    metrics.fom = zeros(n_iterations, 1)
+    metrics.sndr = zeros(n_iterations, 1);
+    metrics.sndr_bench_lin = zeros(n_iterations, 1);
+    metrics.sndr_bench_nonlin = zeros(n_iterations, 1);
+    metrics.fom = zeros(n_iterations, 1);
 
 
     fprintf('\n\n%9s %3s %6s %3s %16s %3s %16s\n',...
