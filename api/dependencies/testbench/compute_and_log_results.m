@@ -28,6 +28,8 @@ function metrics = compute_and_log_results(results, xy_array)
     metrics.sndr = zeros(n_iterations, 1)
     metrics.sndr_bench_lin = zeros(n_iterations, 1)
     metrics.sndr_bench_nonlin = zeros(n_iterations, 1)
+    metrics.fom = zeros(n_iterations, 1)
+
 
     fprintf('\n\n%9s %3s %6s %3s %16s %3s %16s\n',...
     'Iteration', '',...
@@ -68,6 +70,7 @@ function metrics = compute_and_log_results(results, xy_array)
         metrics.sndr(iteration) = sndr;
         metrics.sndr_bench_nonlin(iteration) = sndr_bench_nonlin;
         metrics.sndr_bench_lin(iteration) = sndr_bench_lin;
+        metrics.fom(iteration) = (sndr_bench_nonlin - sndr)/(sndr_bench_nonlin - sndr_bench_lin);
 
         % Print sndr and sndr benchmark
         % fprintf("%d\t\t\t\t%.2f\t\t%.2f\n", iteration, sndr, sndr_bench);
