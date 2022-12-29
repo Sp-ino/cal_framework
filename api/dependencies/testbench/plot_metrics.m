@@ -12,7 +12,7 @@ function plot_metrics(metrics)
         plot(metrics.sndr_bench_nonlin)
     hold off
 
-    set(get(gca, 'XLabel'), 'String', 'Iteration');
+    set(get(gca, 'XLabel'), 'String', 'Dataset poin');
     set(get(gca, 'YLabel'), 'String', 'SNDR [dB]');
     legend('SNDR of algorithm under test',...
             'SNDR of linear batch estimator',...
@@ -22,6 +22,6 @@ function plot_metrics(metrics)
     figure
     plot(metrics.fom)
 
-    set(get(gca, 'XLabel'), 'String', 'Iteration');
+    set(get(gca, 'XLabel'), 'String', 'Dataset point');
     set(get(gca, 'YLabel'), 'String', 'FOM');
 end
