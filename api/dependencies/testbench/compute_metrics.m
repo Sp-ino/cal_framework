@@ -13,8 +13,15 @@ function [sndr, mse] = compute_metrics(y, ys)
     % Output arguments:
     % - sndr: SNDR computed from y and ys. SNDR is defined as
     %               SNDR = rms(y)/rms(y-ys)
-    % - mse: MSE computed from y and ys 
+    % - mse: MSE computed from y and ys
 
+    if not(size(y, 2) == 1)
+        error("compute_metrics:y must be a column vector!")
+    end
+    if not(size(y, 1) > 1)
+        error("compute_metrics:y is scalar!")
+    end
+    
     indices = floor(3*size(y, 1)/4):size(y,1);
     mse = immse(double(y(indices)), double(ys(indices)));
     sndr = db(rms(double(y(indices)))/rms(double(y(indices))-double(ys(indices))));
