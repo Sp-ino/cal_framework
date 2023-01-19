@@ -28,7 +28,7 @@ function [X1, X2, y, M] = lin_model_sim_run(settings)
     % Read linear settings
     try
         s = settings.lin_settings;
-        lin_len = s.lin_len;
+        filt_len = s.lin_len;
         sequ_len = s.sequ_len;
         output_width = s.output_width;
         noise_stddev = s.noise_stddev;
