@@ -51,37 +51,39 @@ function metrics = compute_and_log_results(results, xy_array)
             X1 = xy_array{iteration}.X1;
             X2 = xy_array{iteration}.X2;
             X = [X1 X2];
-
+            
+            Ms_bench_lin = (X1'*X1)\(X1'*y);
+            ys_bench_lin = X1*Ms_bench_lin;
+            sndr_bench_lin = compute_metrics(y, ys_bench_lin);
+            
             if isempty(X2)
-                sndr_bench_nonlin = '        N/A';    
+                sndr_bench_nonlin = "        N/A";    
+                fom = "        N/A";    
             else
                 % do not print nonlinear benchmark results if X2 is empty
                 Ms_bench_nonlin = (X'*X)\(X'*y);
                 ys_bench_nonlin = X*Ms_bench_nonlin;
                 sndr_bench_nonlin = compute_metrics(y, ys_bench_nonlin);
+                fom = (sndr_bench_nonlin - sndr)/(sndr_bench_nonlin - sndr_bench_lin)
             end
-
-            Ms_bench_lin = (X1'*X1)\(X1'*y);
-            ys_bench_lin = X1*Ms_bench_lin;
-            sndr_bench_lin = compute_metrics(y, ys_bench_lin);
         end
 
         % Save sndr
         metrics.sndr(iteration) = sndr;
         metrics.sndr_bench_nonlin(iteration) = sndr_bench_nonlin;
         metrics.sndr_bench_lin(iteration) = sndr_bench_lin;
-        metrics.fom(iteration) = (sndr_bench_nonlin - sndr)/(sndr_bench_nonlin - sndr_bench_lin);
+        metrics.fom(iteration) = fom;
 
         % Print sndr and sndr benchmark
         % fprintf("%d\t\t\t\t%.2f\t\t%.2f\n", iteration, sndr, sndr_bench);
         if isempty(X2)
-            fprintf('\n%9d %3s %3.2f %3s %s %3s %13.2f',...
+            fprintf('\n%9d %8s %3.2f %3s %s %3s %13.2f',...
             iteration, '',...
             sndr, '',...
             sndr_bench_nonlin, '',...
             sndr_bench_lin)
         else
-            fprintf('\n%9d %3s %3.2f %3s %13.2f %3s %13.2f',...
+            fprintf('\n%9d %8s %3.2f %3s %13.2f %3s %13.2f',...
             iteration, '',...
             sndr, '',...
             sndr_bench_nonlin, '',...
