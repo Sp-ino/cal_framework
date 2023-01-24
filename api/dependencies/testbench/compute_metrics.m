@@ -1,5 +1,5 @@
 function [rse, mse] = compute_metrics(y, ys)
-    % This function computes RSE (in dB) and MSE given
+    % This function computes RSEx (in dB) and MSE given
     % a target sequence and an estimated sequence.
     % Since the estimated sequence is expected to
     % be the output of an adaptive filter, the SNDR
@@ -34,5 +34,5 @@ function [rse, mse] = compute_metrics(y, ys)
     e = y - ys;
     sigma_err = sum(e.^2); % Note that we do not subtract mean from residuals because residuals have mean=0
     sigma_y = sum((y - mean(y)).^2);
-    rse = db(sigma_y/sigma_err);
+    rse = db(sigma_y/sigma_err, 'power');
 end
