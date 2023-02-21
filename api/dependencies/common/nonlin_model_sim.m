@@ -1,7 +1,7 @@
 function xy_array = nonlin_model_sim(n_iterations, settings)
     % Applies nonlinear simulated model a total of n_iterations times
 
-    xy_array = cell(n_iterations);
+    xy_array = cell(n_iterations, 1);
 
     for idx = 1:n_iterations
         [X1, X2, y] = nonlin_model_sim_run(settings);

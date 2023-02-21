@@ -1,8 +1,8 @@
 function xy_array = apply_model(n_iterations,...
                             model,...
                             settings_file,...
-                            meas_data_files)
-
+                            meas_data)
+                            
     % This function is used by a testbench for model calbration algorithms. 
     % It applies a model to generate a 2-dimensional cell-array of
     % size n_iterations x 1, n_iterations being the number
@@ -16,7 +16,7 @@ function xy_array = apply_model(n_iterations,...
     % - n_iterations: number of (X1, X2, y) triplets to generate
     % - model: model according to which the design matrix is 
     %   generated. Ignored if use_meas_data it false
-    % - meas_data_files: vector containing the names(s) of the
+    % - meas_data: vector containing the names(s) of the
     %   file(s) in which measured data is stored. Ignored if
     %   model is a char array
     % - settings_file: char array that specifies the name of the
@@ -31,7 +31,11 @@ function xy_array = apply_model(n_iterations,...
     % 
     % Copyright (c) 2022 Valerio Spinogatti
     % Licensed under GNU License
-        
+                            
+    % --------------------------Read settings from file-----------------------------
+    settings = read_settings(settings_file);
+    % ------------------------------------------------------------------------------
+    
     % -------------------------------Parse model type-------------------------------
     if isa(model, 'char') % In this case we use functions that produce simulated data to generate the output array
         switch model
@@ -58,13 +62,25 @@ function xy_array = apply_model(n_iterations,...
         model_func = model;
 
         % Load external data
-        current_path = fileparts(mfilename( 'fullpath' ));
-        [inputs, targets] = load_traces(strcat(current_path, '/../../../data/', meas_data_files));
+        if isa(meas_data, 'function_handle')
+            xy_pairs = meas_data(n_iterations, settings);
+            sequ_len = size(xy_pairs{1}.y, 1);
+            inputs = zeros(sequ_len, n_iterations);
+            targets = zeros(sequ_len, n_iterations);
 
-        % Compute actual number of iterations as the minimum between the number of traces and n_iterations
-        n_iterations = min(n_iterations, size(inputs, 2));
-        inputs = inputs(:, 1:n_iterations);
-        targets = targets(:, 1:n_iterations);
+            for idx = 1:n_iterations
+                inputs(:, idx) = xy_pairs{idx}.X1(:, 1);
+                targets(:, idx) = xy_pairs{idx}.y;
+            end
+        else
+            current_path = fileparts(mfilename( 'fullpath' ));
+            [inputs, targets] = load_traces(strcat(current_path, '/../../../data/', meas_data));
+
+            % Compute actual number of iterations as the minimum between the number of traces and n_iterations
+            n_iterations = min(n_iterations, size(inputs, 2));
+            inputs = inputs(:, 1:n_iterations);
+            targets = targets(:, 1:n_iterations);
+        end
 
         % Define a flag variable that tells whether or not we are using simulated data
         sim_data = false;
@@ -76,10 +92,6 @@ function xy_array = apply_model(n_iterations,...
     end
     % ------------------------------------------------------------------------------
 
-    % -------------Read settings from file and create xy_array----------------------
-    settings = read_settings(settings_file);
-    % ------------------------------------------------------------------------------
-    
     % --------------Generate output array containing (X1, X2, y) triplets-----------
     if sim_data
         xy_array = model_func(n_iterations, settings);

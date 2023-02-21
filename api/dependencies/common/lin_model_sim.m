@@ -1,7 +1,7 @@
 function xy_array = lin_model_sim(n_iterations, settings)
     % Applies linear simulated model a total of n_iterations times
 
-    xy_array = cell(n_iterations);
+    xy_array = cell(n_iterations, 1);
     
     for idx = 1:n_iterations
         [X1, X2, y] = lin_model_sim_run(settings);
@@ -37,9 +37,10 @@ function [X1, X2, y, M] = lin_model_sim_run(settings)
         error(sprintf("lin_model_sim:check that the settings file has the correct fields."))
     end
 
-    % generate white noise with std deviation = 0.1
-    scaling = 0.1;
-    x = scaling*randn(sequ_len, 1);
+    % generate white noise with std deviation = 0.3
+    scaling = 0.3;
+    % x = scaling*randn(sequ_len, 1);
+    x = rand([sequ_len, 1])*2 - 1;
 
     X = zeros(sequ_len, filt_len);
     for i = 1 : filt_len
