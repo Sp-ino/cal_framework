@@ -64,9 +64,9 @@ function xy_array = apply_model(n_iterations,...
         % Load external data
         if isa(meas_data, 'function_handle')
             xy_pairs = meas_data(n_iterations, settings);
-            sequ_len = size(xy_pairs{1}.y, 1);
-            inputs = zeros(sequ_len, n_iterations);
-            targets = zeros(sequ_len, n_iterations);
+            % sequ_len = size(xy_pairs{1}.y, 1);
+            % inputs = zeros(sequ_len, n_iterations);
+            % targets = zeros(sequ_len, n_iterations);
 
             for idx = 1:n_iterations
                 inputs(:, idx) = xy_pairs{idx}.X1(:, 1);

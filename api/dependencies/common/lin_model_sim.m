@@ -42,13 +42,21 @@ function [X1, X2, y, M] = lin_model_sim_run(settings)
     % x = scaling*randn(sequ_len, 1);
     x = rand([sequ_len, 1])*2 - 1;
 
+    S = zeros(sequ_len, filt_len);
     X = zeros(sequ_len, filt_len);
+
+    for i = 1 : filt_len
+        S(:, i) = filter([zeros(1, i-1) 1], 1, x);
+    end
+
+    M = scaling*randn(filt_len, output_width);
+    y = S*M;
+    x = x + noise_stddev*randn(sequ_len, output_width);
+
     for i = 1 : filt_len
         X(:, i) = filter([zeros(1, i-1) 1], 1, x);
     end
 
-    M = scaling*randn(filt_len, output_width);
-    y = X*M + noise_stddev*randn(sequ_len, output_width);
     X1 = X;
     X2 = [];
 end

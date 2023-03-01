@@ -44,10 +44,20 @@ function [X1, X2, y, M] = nonlin_model_sim_run(settings)
     scaling = 0.1;
     x = scaling*randn(sequ_len, 1);
 
-    M = scaling*randn(lin_len+nonlin_len, 1); % model
-    y = zeros(sequ_len, 1);
+    M = scaling*randn(lin_len+nonlin_len, 1);
+    S = zeros(sequ_len, lin_len+nonlin_len);
     X = zeros(sequ_len, lin_len+nonlin_len);
     
+    for i = 1 : lin_len
+        S(:, i) = filter([zeros(1, i-1) 1], 1, x);
+    end
+    for i = 1 : nonlin_len
+        S(:, lin_len+i) = x.^(i+1);
+    end
+
+    y = S*M;
+    x = x + noise_stddev*randn(sequ_len, output_width);
+
     for i = 1 : lin_len
         X(:, i) = filter([zeros(1, i-1) 1], 1, x);
     end
@@ -55,7 +65,6 @@ function [X1, X2, y, M] = nonlin_model_sim_run(settings)
         X(:, lin_len+i) = x.^(i+1);
     end
 
-    y = X*M;
     X1 = X(:, 1:lin_len);
     X2 = X(:, lin_len+1:end);
 end
