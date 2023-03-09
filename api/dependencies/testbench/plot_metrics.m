@@ -8,14 +8,14 @@ function plot_metrics(metrics)
     hold on
     plot(metrics.rse)
     plot(metrics.rse_bench_lin)
-    if isa(metrics.rse_bench_nonlin, 'double')
+    if not(isnan(metrics.rse_bench_nonlin))
         plot(metrics.rse_bench_nonlin)
     end
     hold off
 
     set(get(gca, 'XLabel'), 'String', 'Dataset point');
     set(get(gca, 'YLabel'), 'String', 'RSE [dB]');
-    if isa(metrics.rse_bench_nonlin, 'double')
+    if not(isnan(metrics.rse_bench_nonlin))
         legend('RSE of algorithm under test',...
                 'RSE of linear batch estimator',...
                 'RSE of nonlinear batch estimator',...
