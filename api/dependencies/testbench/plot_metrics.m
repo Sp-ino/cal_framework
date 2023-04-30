@@ -6,23 +6,23 @@ function plot_metrics(metrics)
 
     figure
     hold on
-    plot(metrics.rse)
-    plot(metrics.rse_bench_lin)
     if not(isnan(metrics.rse_bench_nonlin))
         plot(metrics.rse_bench_nonlin)
     end
+    plot(metrics.rse_bench_lin)
+    plot(metrics.rse)
     hold off
 
     set(get(gca, 'XLabel'), 'String', 'Dataset point');
     set(get(gca, 'YLabel'), 'String', 'RSE [dB]');
     if not(isnan(metrics.rse_bench_nonlin))
-        legend('RSE of algorithm under test',...
+        legend('RSE of nonlinear batch estimator',...
                 'RSE of linear batch estimator',...
-                'RSE of nonlinear batch estimator',...
+                'RSE of algorithm under test',... 
                 'Location', 'best')
     else
-        legend('RSE of algorithm under test',...
-                'RSE of linear batch estimator',...
+        legend('RSE of linear batch estimator',...
+                'RSE of algorithm under test',... 
                 'Location', 'best')
     end
 
