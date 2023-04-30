@@ -19,8 +19,18 @@ function nargs = find_nargin(algorithm)
     if strcmp(extension, '.mexw64')
         nonmex_name = alg_name(1:end-4);
         nonmex_algorithm = str2func(nonmex_name);
-
-        nargs = nargin(nonmex_algorithm);
+        
+        try
+            nargs = nargin(nonmex_algorithm);
+        catch
+            try
+                nonmex_name = alg_name(1:end-7);
+                nonmex_algorithm = str2func(nonmex_name);
+                nargs = nargin(nonmex_algorithm);
+            catch
+                error("Could not apply nargin to function handle %s\n Since the function handle that has been passed refers to a mex function, make sure its name ends with _mex", alg_name)
+            end
+        end
         return
     end
     
