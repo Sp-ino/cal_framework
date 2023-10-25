@@ -37,6 +37,8 @@ function xy_array = apply_model(n_iterations,...
         switch model
         case 'lin_sim'
             model_func = @lin_model_sim;
+        case 'lin_simulink_debug'
+            model_func = @lin_model_simulink_debug;
         case 'nonlin_sim'
             model_func = @nonlin_model_sim;
         otherwise

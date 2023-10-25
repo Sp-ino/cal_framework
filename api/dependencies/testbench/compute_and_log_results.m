@@ -68,9 +68,12 @@ function metrics = compute_and_log_results(results, xy_array)
 
         % Save sndr
         metrics.sndr(iteration) = sndr;
-        metrics.sndr_bench_nonlin(iteration) = sndr_bench_nonlin;
         metrics.sndr_bench_lin(iteration) = sndr_bench_lin;
-        metrics.fom(iteration) = (sndr_bench_nonlin - sndr)/(sndr_bench_nonlin - sndr_bench_lin);
+        
+        if not(isempty(X2))
+            metrics.sndr_bench_nonlin(iteration) = sndr_bench_nonlin;
+            metrics.fom(iteration) = (sndr_bench_nonlin - sndr)/(sndr_bench_nonlin - sndr_bench_lin);
+        end
 
         % Print sndr and sndr benchmark
         % fprintf("%d\t\t\t\t%.2f\t\t%.2f\n", iteration, sndr, sndr_bench);
