@@ -5,7 +5,7 @@ function metrics = compute_and_log_results(results, xy_array)
     % a double precision batch estimator, if the array of
     % (X1, X2, y) triplets is passed as argument.
     % The function can also return an array that contains the
-    % computed SNDRs.
+    % computed rses.
     % 
     % Input arguments:
     % - results: cell array. Each cell must contain a struct with
@@ -18,52 +18,54 @@ function metrics = compute_and_log_results(results, xy_array)
     % Output arguments:
     % - metrics: cell array containing structs. Each struct contains
     %   3 fields:
-    %       - sndr => SNDR resulting from the algorithm under test
-    %       - sndr_bench_nonlin => SNDR resulting from nonlinear
+    %       - rse => relative squared error resulting from the algorithm under test
+    %       - rse_bench_nonlin => relative squared error resulting from nonlinear
     %         benchmark results (contains '    N/A' if X2 is empty)
-    %       - sndr_bench_lin => SNDR resulting from linear
+    %       - rse_bench_lin => relative squared error resulting from linear
     %         benchmark results
 
     n_iterations = length(results);
-    metrics.sndr = zeros(n_iterations, 1);
-    metrics.sndr_bench_lin = zeros(n_iterations, 1);
-    metrics.sndr_bench_nonlin = zeros(n_iterations, 1);
+    metrics.rse = zeros(n_iterations, 1);
+    metrics.rse_bench_lin = zeros(n_iterations, 1);
+    metrics.rse_bench_nonlin = zeros(n_iterations, 1);
     metrics.fom = zeros(n_iterations, 1);
 
 
     fprintf('\n\n%9s %3s %6s %3s %16s %3s %16s\n',...
     'Dataset point', '',...
-    'SNDR ','',...
-    'SNDR_bench_nonlin', '',...
-    'SNDR_bench_lin   ');
+    'RSE ','',...
+    'RSE_bench_nonlin', '',...
+    'RSE_bench_lin   ');
 
     warning('off');
 
     for iteration = 1:n_iterations
-        % Retrieve y and ys and compute SNDR for the current iteration
+        % Retrieve y and ys and compute RSE for the current iteration
         y = results{iteration}.y;
         ys = results{iteration}.ys;
-        sndr = compute_metrics(y, ys);
+        rse = compute_metrics(y, ys);
         
-        % Retrieve X and compute benchmark SNDR if xy_array argument is passed
-        sndr_bench = [];
+        % Retrieve X and compute benchmark RSE if xy_array argument is passed
+        rse_bench = [];
         if nargin == 2
             X1 = xy_array{iteration}.X1;
             X2 = xy_array{iteration}.X2;
             X = [X1 X2];
-
+            
+            Ms_bench_lin = (X1'*X1)\(X1'*y);
+            ys_bench_lin = X1*Ms_bench_lin;
+            rse_bench_lin = compute_metrics(y, ys_bench_lin);
+            
             if isempty(X2)
-                sndr_bench_nonlin = '        N/A';    
+                rse_bench_nonlin = "        N/A";    
+                fom = "        N/A";    
             else
                 % do not print nonlinear benchmark results if X2 is empty
                 Ms_bench_nonlin = (X'*X)\(X'*y);
                 ys_bench_nonlin = X*Ms_bench_nonlin;
-                sndr_bench_nonlin = compute_metrics(y, ys_bench_nonlin);
+                rse_bench_nonlin = compute_metrics(y, ys_bench_nonlin);
+                fom = (rse_bench_nonlin - rse)/(rse_bench_nonlin - rse_bench_lin);
             end
-
-            Ms_bench_lin = (X1'*X1)\(X1'*y);
-            ys_bench_lin = X1*Ms_bench_lin;
-            sndr_bench_lin = compute_metrics(y, ys_bench_lin);
         end
 
         % Save sndr
@@ -75,20 +77,20 @@ function metrics = compute_and_log_results(results, xy_array)
             metrics.fom(iteration) = (sndr_bench_nonlin - sndr)/(sndr_bench_nonlin - sndr_bench_lin);
         end
 
-        % Print sndr and sndr benchmark
-        % fprintf("%d\t\t\t\t%.2f\t\t%.2f\n", iteration, sndr, sndr_bench);
+        % Print rse and rse benchmark
+        % fprintf("%d\t\t\t\t%.2f\t\t%.2f\n", iteration, rse, rse_bench);
         if isempty(X2)
-            fprintf('\n%9d %3s %3.2f %3s %s %3s %13.2f',...
+            fprintf('\n%9d %8s %3.2f %3s %s %3s %13.2f',...
             iteration, '',...
-            sndr, '',...
-            sndr_bench_nonlin, '',...
-            sndr_bench_lin)
+            rse, '',...
+            rse_bench_nonlin, '',...
+            rse_bench_lin)
         else
-            fprintf('\n%9d %3s %3.2f %3s %13.2f %3s %13.2f',...
+            fprintf('\n%9d %8s %3.2f %3s %13.2f %3s %13.2f',...
             iteration, '',...
-            sndr, '',...
-            sndr_bench_nonlin, '',...
-            sndr_bench_lin)
+            rse, '',...
+            rse_bench_nonlin, '',...
+            rse_bench_lin)
         end
     end
     

@@ -2,22 +2,29 @@ function plot_metrics(metrics)
     % Plots metrics as curves. On the x axis of the plot there
     % are the iterations (each iteration corresponds
     % to an input-target pair) and on the y axis there are
-    % the values of SNDR.
+    % the values of RSE.
 
     figure
     hold on
-    plot(metrics.sndr)
-    plot(metrics.sndr_bench_lin)
-    if isa(metrics.sndr_bench_nonlin, 'double')
-        plot(metrics.sndr_bench_nonlin)
+    if not(isnan(metrics.rse_bench_nonlin))
+        plot(metrics.rse_bench_nonlin)
+    end
+    plot(metrics.rse_bench_lin)
+    plot(metrics.rse)
     hold off
 
     set(get(gca, 'XLabel'), 'String', 'Dataset point');
-    set(get(gca, 'YLabel'), 'String', 'SNDR [dB]');
-    legend('SNDR of algorithm under test',...
-            'SNDR of linear batch estimator',...
-            'SNDR of nonlinear batch estimator',...
-            'Location', 'best')
+    set(get(gca, 'YLabel'), 'String', 'RSE [dB]');
+    if not(isnan(metrics.rse_bench_nonlin))
+        legend('RSE of nonlinear batch estimator',...
+                'RSE of linear batch estimator',...
+                'RSE of algorithm under test',... 
+                'Location', 'best')
+    else
+        legend('RSE of linear batch estimator',...
+                'RSE of algorithm under test',... 
+                'Location', 'best')
+    end
 
     figure
     plot(metrics.fom)

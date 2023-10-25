@@ -29,29 +29,30 @@ testbench/acceleration scripts wherever you like, just make sure that the call t
    
 The algorithms to test should be MATLAB functions with the following requisites:
 - The function can accept 2 or 3 input arguments. In the first case, it accepts
-  a matrix X as its first argument and a column vector y as its second argument.
-  X should has size *sequ_len x filt_len*, where sequ_len is the length of the
-  input sequence for calibration and *filt_len* is the length of the adaptive filter.
-  y should be of size *sequ_len x 1* In the second case, the function accepts X1,
+  a matrix X1 as its first argument and a column vector y as its second argument.
+  X1 should has size *sequ_len x filt_len*, where sequ_len is the length of the
+  input sequence for calibration and *filt_len* is the length of the linear filter.
+  y should be of size *sequ_len x 1*. A function that only accepts two arguments
+  will be automatically interpreted by the testbench as an algorithm that solves
+  **linear** regression problems. In the second case, the function accepts X1,
   X2 and y as arguments. The sizes of X1 and X2 are, respectively, *sequ_len x lin_len*
   and *sequ_len x nonlin_len*, where *lin_len* is the length of the linear part of
   the filter and *nonlin_len* is the length of the nonlinear part. y has size *sequ_len x 1*
-  like in the previous case. In both cases y is the target sequence, while X, X1 and X2
-  are the input data matrices which are built from the input sequence x.
+  like in the previous case. In both cases y is the target sequence, while X1 and X2
+  are the design matrices which are built from the input sequence x. A function that
+  accepts three input arguments will automatically intepreted by the testbench as
+  an algorithm that solves **nonlinear** regression problems.
 - The function should return a column vector ys that represents the estimated
   sequence (of size *sequ_len x 1*).
 
 #### Settings files
 Settings regarding data (e.g. filter length, sequence length, etc.) should be stored in a dedicated
 folder whose path must be passed as an argument to `gen_mex` and `testbench`. This folder should
-contain two .json files:
-- joint_settings.json: contains settings for a joint algorithm. The expression "joint
-  algorithm" here refers to an algorithm that accepts a single input data matrix X, which
-  can contain a linear and a nonlinear part. A joint algorithm does not need to know how the matrix
-  is organized (i.e. which part is the linear one and which part is the nonlinear one).
-- split_settings.json: contains settings for a split algorithm. The expression "split
-  algorithm" here refers to an algorithm that needs 2 separate input data matrices X1 and X2,
-  X1 being the linear part and X2 being the nonlinear part of the overall input matrix.
+contain a .json file called `settings.json`. The file contains two fields:
+- *lin_settings*: settings for linear regression algorithms.
+- *nonlin_settings*: settings for nonlinear regression algorithms.
+Both fields should contain subfields that specify information needed to generate the model's design
+matrices and, when needed, the data.
 
 
 ## API description (`gen_mex` and `testbench`)

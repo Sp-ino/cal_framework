@@ -48,46 +48,81 @@ end
 function [inputs, targets] = load_from_single_file(file_path, start, stop)
 
     data = load(file_path);
-    idata = data.idata; % xIf is the input *to the channel + analog front end*
-    odata2 = data.odata2; % yIf is the output *of the channel + analog front end* (noisy and distorted).
-    % t = data.t;
-    
-    if strcmp(stop, 'end')
-        idata = idata(start:end, :);
-        odata2 = odata2(start:end, :, :);
-    else        
-        idata = idata(start:stop, :);
-        odata2 = odata2(start:stop, :, :);
-    end
 
-    sequ_len = size(idata, 1);
-    n_input_traces = size(idata, 2);
-    
-    inputs = zeros(sequ_len, 2*n_input_traces);
-    targets = zeros(sequ_len, 2*n_input_traces);
-    
-    % ystd = std(idata, [], 'all');
-    % xstd = std(odata2, [], 'all');
-    
-    for input_idx = 1:n_input_traces                
-        x1 = odata2(:, input_idx, 1);
-        x2 = odata2(:, input_idx, 2);
-        y = idata(:, input_idx);
+    try
+        idata = data.idata; % xIf is the input *to the channel + analog front end*
+        odata2 = data.odata2; % yIf is the output *of the channel + analog front end* (noisy and distorted).
+        % t = data.t;
         
-        xmax1 = max(abs(x1), [], 'all');
-        xmax2 = max(abs(x2), [], 'all');
-        ymax = max(abs(y), [], 'all');
-        xscaling1 = 0.9/xmax1;
-        xscaling2 = 0.9/xmax2;
-        yscaling = 0.9/ymax;
-
-        y = y';
-        x1 = x1';
-        x2 = x2';
+        if strcmp(stop, 'end')
+            idata = idata(start:end, :);
+            odata2 = odata2(start:end, :, :);
+        else        
+            idata = idata(start:stop, :);
+            odata2 = odata2(start:stop, :, :);
+        end
+    
+        sequ_len = size(idata, 1);
+        n_input_traces = size(idata, 2);
         
-        inputs(:, input_idx*2-1) = xscaling1*x1;
-        inputs(:, input_idx*2) = xscaling2*x2;
-        targets(:, input_idx*2-1) = yscaling*y;
-        targets(:, input_idx*2) = yscaling*y;
+        % ystd = std(idata, [], 'all');
+        % xstd = std(odata2, [], 'all');
+        inputs = zeros(sequ_len, 2*n_input_traces);
+        targets = zeros(sequ_len, 2*n_input_traces);
+        
+        for input_idx = 1:n_input_traces                
+            x1 = odata2(:, input_idx, 1);
+            x2 = odata2(:, input_idx, 2);
+            y = idata(:, input_idx);
+            
+            xmax1 = max(abs(x1), [], 'all');
+            xmax2 = max(abs(x2), [], 'all');
+            ymax = max(abs(y), [], 'all');
+            xscaling1 = 0.9/xmax1;
+            xscaling2 = 0.9/xmax2;
+            yscaling = 0.9/ymax;
+    
+            y = y';
+            x1 = x1';
+            x2 = x2';
+            
+            inputs(:, input_idx*2-1) = xscaling1*x1;
+            inputs(:, input_idx*2) = xscaling2*x2;
+            targets(:, input_idx*2-1) = yscaling*y;
+            targets(:, input_idx*2) = yscaling*y;
+        end
+    catch
+        idata = data.idata; % xIf is the input *to the channel + analog front end*
+        odata = data.odata; % yIf is the output *of the channel + analog front end* (noisy and distorted).
+        % t = data.t;
+        
+        if strcmp(stop, 'end')
+            idata = idata(start:end, :);
+            odata = odata(start:end, :, :);
+        else        
+            idata = idata(start:stop, :);
+            odata = odata(start:stop, :, :);
+        end
+    
+        sequ_len = size(idata, 1);
+        n_input_traces = size(idata, 2);
+        inputs = zeros(sequ_len, n_input_traces);
+        targets = zeros(sequ_len, n_input_traces);
+        
+        for input_idx = 1:n_input_traces                
+            x = odata(:, input_idx);
+            y = idata(:, input_idx);
+            
+            xmax1 = max(abs(x), [], 'all');
+            ymax = max(abs(y), [], 'all');
+            xscaling1 = 0.9/xmax1;
+            yscaling = 0.9/ymax;
+    
+            y = y';
+            x = x';
+            
+            inputs(:, input_idx) = xscaling1*x;
+            targets(:, input_idx) = yscaling*y;
+        end
     end
 end

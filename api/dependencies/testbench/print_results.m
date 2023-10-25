@@ -5,7 +5,7 @@ function print_results(y, ys)
     % - y: target sequence
     % - ys: estimated sequence
     
-    [sndr, mse] = compute_metrics(y, ys);
+    [rse, mse] = compute_metrics(y, ys);
     fprintf("\nOutput MSE: %f", mse);
-    fprintf("\nOutput SNDR: %f dB\n", sndr);
+    fprintf("\nOutput RSE: %f dB\n", rse);
 end
